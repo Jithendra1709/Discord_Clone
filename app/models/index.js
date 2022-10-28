@@ -32,8 +32,8 @@ const sequelize=new Sequelize(dbConfig.DB,dbConfig.USER,dbConfig.PASSWORD,
     db.loginOtps=require('./loginAuth_model')(sequelize,DataTypes);
     db.servers=require('./server_model')(sequelize,DataTypes);
     db.channels=require('./channel_model')(sequelize,DataTypes);
-    db.servermembers=require('./Servermember_model')(sequelize,DataTypes);
-    db.channelmembers=require('./channelmember_model')(sequelize,DataTypes);
+    db.servermember=require('./Servermember_model')(sequelize,DataTypes);
+    db.channelmember=require('./channelmember_model')(sequelize,DataTypes);
     db.messages=require('./message_model')(sequelize,DataTypes);
     db.share=require('./share_model')(sequelize,DataTypes);
     db.notification=require('./notification_model')(sequelize,DataTypes);
@@ -43,23 +43,18 @@ const sequelize=new Sequelize(dbConfig.DB,dbConfig.USER,dbConfig.PASSWORD,
     })
     .catch((err)=>console.log('Error is',err));
 
-    //  db.channel.hasOne(db.share);
-    // db.share.belongsTo(db.channel);
 
-    // // //many to many relation for channels and users via channelmembers
-    // db.users.belongsToMany(db.channels,{through: db.channelmembers});
-    // db.channels.belongsToMany(db.users,{through:db.channelmembers});
+//Many to Many relation for channels and users using channlemember(juntion table).
+    db.channels.hasMany(db.channelmember);
+    db.channelmember.belongsTo(db.channels);
+    db.users.hasMany(db.channelmember);
+    db.channelmember.belongsTo(db.users);
 
-    // //  //many to many relation for servers and users via servermembers
-    //  db.users.belongsToMany(db.servers,{through:db.servermembers});
-    //  db.servers.belongsToMany(db.users,{through:db.servermembers});
-
-    db.channels.belongsToMany(db.users, {through:db.channelmembers});
-    db.users.belongsToMany(db.channels,{through:db.channelmembers});
-
-    db.servers.belongsToMany(db.users, {through: db.servermembers});
-    db.users.belongsToMany(db.servers,{through:db.servermembers});
-
+//Many to Many relation for server and users using servermember(juntion table). 
+    db.servers.hasMany(db.servermember);
+    db.servermember.belongsTo(db.servers);
+    db.users.hasMany(db.servermember);
+    db.servermember.belongsTo(db.users);
 
 
 
