@@ -1,3 +1,5 @@
+const { DATE } = require("sequelize");
+
 module.exports=(sequelize,DataTypes)=>{
     const Channel=sequelize.define('channel',{
         name:{
@@ -29,8 +31,10 @@ module.exports=(sequelize,DataTypes)=>{
             type:DataTypes.INTEGER
         },
         private_channel:{
-            type:DataTypes.BOOLEAN
+            type:DataTypes.BOOLEAN,
+            defaultValue: false,
         },
+      
         
     });
     return Channel;

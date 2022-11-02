@@ -26,6 +26,9 @@ app.use('/message',messagerouter);
 const channelrouter=require('./Routes/channelroutes');
 app.use('/channel',channelrouter);
 
+const rolerouter=require('./Routes/role_routes');
+app.use('/role',rolerouter);
+
 const serverrouter=require('./Routes/serverroutes');
 app.use('/server',serverrouter);
 

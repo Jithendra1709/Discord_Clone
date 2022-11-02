@@ -5,5 +5,6 @@ const {authenticateToken}=require('../controllers/authnitication');
 serverrouter.post('/addserver',authenticateToken,servercontroller.addserver);
 serverrouter.get('/getnonprivatechannels/:id',authenticateToken,servercontroller.getnonprivatechannels);
 serverrouter.get('/getallservers',authenticateToken,servercontroller.getallservers);
+serverrouter.post('/joinserver/:id',authenticateToken,servercontroller.joinserver);
 
 module.exports=serverrouter;

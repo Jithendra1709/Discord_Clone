@@ -1,4 +1,5 @@
 const db=require('../models');
+const User=db.users;
 const Server=db.servers;
 const Servermember=db.servermember;
 const Channel=db.channels;
@@ -72,10 +73,17 @@ res.status(200).send(details);
     catch(err){res.send(err.message);}
 }
 
+const joinserver=async(req,res)=>{
+  
+    const join=await Servermember.create({userId:req.userId,serverId:req.params.id});
+    res.status(200).send(join);
+}
+
+
 
 
 
 
 module.exports={
-    addserver,getallservers,getnonprivatechannels
+    addserver,getallservers,getnonprivatechannels,joinserver,
 }

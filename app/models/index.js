@@ -70,6 +70,8 @@ const sequelize=new Sequelize(dbConfig.DB,dbConfig.USER,dbConfig.PASSWORD,
     db.channels.hasMany(db.serverchanneluser);
     db.serverchanneluser.belongsTo(db.channels);
 //relation between channels and permissions
+    db.serverchanneluser.hasMany(db.permission);
+    db.permission.belongsTo(db.serverchanneluser);
 
-
+    
     module.exports=db;

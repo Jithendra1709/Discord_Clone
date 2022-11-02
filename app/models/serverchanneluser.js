@@ -5,7 +5,11 @@ module.exports=(sequelize,DataTypes)=>{
         },
         private:{
             type:DataTypes.BOOLEAN,
-        }
+        },
+        role:{
+            type:DataTypes.INTEGER,
+            
+        },
     });
     return Serverchanneluser;
 };

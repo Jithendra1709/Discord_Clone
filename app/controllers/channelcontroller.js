@@ -3,11 +3,12 @@ const db=require('../models');
 const Channel=db.channels;
 const User=db.users;
 const Channelmember=db.channelmember;
-const Serverchannel=db.serverchannel;
+const Servermember=db.servermember;
 const Serverchanneluser=db.serverchanneluser;
 
 //To addchannel by the user
 const addchannel=async(req,res)=>{
+    const member=await Servermember.findOne({where:{userId:req.userId}})
     let info={
         name:req.body.name,
         // channel_id:req.body.channel_id,
@@ -20,6 +21,7 @@ const addchannel=async(req,res)=>{
         created_by:req.userId,
         private_channel:req.body.private_channel,
     }
+    if(member){
     try{
     const channel=await Channel.create(info);
     const addchannel=await Channelmember.create({
@@ -46,9 +48,11 @@ const addchannel=async(req,res)=>{
     }
 }
 
-    catch(err){ res.send(err.message)}
-    
+    catch(err){ res.send(err.message)}   
 }
+else{res.send('first join the server')}
+}
+
 
 
 
@@ -110,6 +114,7 @@ const joinchannel=async(req,res)=>{
             userId:req.userId,
             private:channel.private_channel,
             serverId:channel.serverId,
+            role:req.body.role,
             channelId:id})
 
         
