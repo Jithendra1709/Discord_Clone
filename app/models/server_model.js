@@ -3,13 +3,16 @@ module.exports=(sequelize,DataTypes)=>{
         name:{
             type:DataTypes.STRING
         },
-        channel_id:{
-            type:DataTypes.INTEGER
-        },
-        profile_pic:{
-            type:DataTypes.BLOB
-        },
-        notification:{
+        // channel_id:{
+        //     type:DataTypes.INTEGER
+        // },
+        // profile_pic:{
+        //     type:DataTypes.BLOB
+        // },
+        // notification:{
+        //     type:DataTypes.INTEGER
+        // },
+        created_by:{
             type:DataTypes.INTEGER
         },
     });

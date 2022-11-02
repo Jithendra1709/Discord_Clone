@@ -1,7 +1,9 @@
 const servercontroller=require('../controllers/servercontroller');
 const serverrouter=require('express').Router();
+const {authenticateToken}=require('../controllers/authnitication');
 
-serverrouter.post('/addserver',servercontroller.addserver);
-serverrouter.get('/:id',servercontroller.getserver);
+serverrouter.post('/addserver',authenticateToken,servercontroller.addserver);
+serverrouter.get('/getnonprivatechannels/:id',authenticateToken,servercontroller.getnonprivatechannels);
+serverrouter.get('/getallservers',authenticateToken,servercontroller.getallservers);
 
 module.exports=serverrouter;

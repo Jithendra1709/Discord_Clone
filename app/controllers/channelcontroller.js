@@ -1,37 +1,50 @@
-const { channelmembers, users } = require('../models');
+// const { channelmembers, users } = require('../models');
 const db=require('../models');
 const Channel=db.channels;
 const User=db.users;
 const Channelmember=db.channelmember;
+const Serverchannel=db.serverchannel;
+const Serverchanneluser=db.serverchanneluser;
 
 //To addchannel by the user
 const addchannel=async(req,res)=>{
     let info={
         name:req.body.name,
-        channel_id:req.body.channel_id,
-        message_id:req.body.message_id,
-        thread_id:req.body.thread_id,
-        share:req.body.share,
-        notification:req.body.notification,
-        user_id:req.userId,
+        // channel_id:req.body.channel_id,
+        // message_id:req.body.message_id,
+        // thread_id:req.body.thread_id,
+        // share:req.body.share,
+        // notification:req.body.notification,
+        type:req.body.type,
+        serverId:req.body.serverId,
+        created_by:req.userId,
+        private_channel:req.body.private_channel,
     }
     try{
     const channel=await Channel.create(info);
     const addchannel=await Channelmember.create({
         userId:req.userId,
         channelId:channel.id,
-        // channelId:req.body.channel_id,
-        // channelId:{include:
-        // [{
-        //     model:db.channels,
-        //     attributes:['id'],
-        // }]}
     })
+    if(!channel.private_channel){
+    const serverchannel=await Serverchanneluser.create({
+        userId:req.userId,
+        serverId:channel.serverId,
+        channelId:channel.id,
+        private:false})
    // console.log(channel.id);
     res.status(200).send(channel);
-   // res.json(addchannel);
-  
     }
+    else{
+        const serverchannel=await Serverchanneluser.create({
+            userId:req.userId,
+            serverId:channel.serverId,
+            channelId:channel.id,
+
+            private:true})
+        res.status(200).send(channel);
+    }
+}
 
     catch(err){ res.send(err.message)}
     
@@ -44,7 +57,7 @@ const getchannel=async(req,res)=>{
     //let id=req.params.id;
     
     try{
-    const channel=await Channel.findAll({where :{user_id:req.userId}});
+    const channel=await Channel.findAll({where :{created_by:req.userId}});
     res.status(200).send(channel);
     // console.log(req.userId+"hello");
     }
@@ -76,20 +89,31 @@ const sendmsg=async(req,res)=>{
     catch(err){res.send(err.message)}
 }
 
+
 //Join a channel by an user so that the junction table gets updated.
 const joinchannel=async(req,res)=>{
+    let id=req.params.id;
     try{
-        // let channel=await Channel.findOne({where:{channel_id:req.body.channel_id}});
-       
-       if(await Channel.findOne({where:{id:req.body.id}})) {
+        // let channel=await Channel.findOne({where:{id:req.body.id,private_channel:false}});
+        let channel=await Channel.findOne({where:{id:id}});
+
+        // console.log(channel.name)
+       if(channel) {
       let info={
         userId:req.userId,
-        channelId:req.body.id,
+        channelId:id,
       }
-    //   console.log('hello')
+     
         const data=await Channelmember.create(info);
+        const serverchannel=await Serverchanneluser.create({
+            
+            userId:req.userId,
+            private:channel.private_channel,
+            serverId:channel.serverId,
+            channelId:id})
+
         
-            res.status(200).send(data);
+            res.status(200).json({channelmemeberdata:data,serverchanneldata:serverchannel});
           
     }
     else

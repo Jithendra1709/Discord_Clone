@@ -1,5 +1,7 @@
 const users = [];
-
+const db=require('../../models');
+const User=db.users;
+const serverchanneluser=db.serverchanneluser
 
 function userJoin(id, username, room) {
   const user = { id, username, room };

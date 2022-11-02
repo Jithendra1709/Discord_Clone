@@ -29,6 +29,7 @@ const getOneuser=async(req,res)=>{
     let id=req.params.id;
     try{
     const user=await User.findOne({where :{id:id}});
+    // console.log(user.name)
     res.status(200).send(user);
     }
     catch(err){res.send(err.message)}
@@ -38,7 +39,7 @@ const getOneuser=async(req,res)=>{
 const login=async(req,res)=>{
     try{
         
-        const user= await User.findOne({where:{name:req.body.userName}});
+        const user= await User.findOne({where:{email_id:req.body.userName}});
         if(user==null)
         {
             // res.send("User didnt exist.....\n For creating an new user go to '127.0.0.1/user/adduser'");
@@ -52,7 +53,7 @@ const login=async(req,res)=>{
                 };
                 //console.log(data);
                   const accessToken = jwt.sign(data,`${process.env.ACCESS_TOKEN_SECRET}`, {
-                    expiresIn: '1h'
+                    expiresIn: '1d'
                   });
                  // console.log(accessToken);
               res.json({

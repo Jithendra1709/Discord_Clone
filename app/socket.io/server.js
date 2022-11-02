@@ -4,6 +4,8 @@ const express = require('express');
 const socketio = require('socket.io');
 const formatMessage = require('./utils/message');
 const {userJoin,getCurrentUser,userLeave,getRoomUsers} = require('./utils/users');
+const {authenticateToken}=require('.././controllers/authnitication');
+
 
 const app = express();
 const server = http.createServer(app);
@@ -17,12 +19,12 @@ const Name = 'Discord';
 
 io.on('connection', socket => {
   socket.on('joinRoom', ({ username, room }) => {
-    const user = userJoin(socket.id, username, room);
+    const user = userJoin(req.userId, username, room);
 
     socket.join(user.room);
 
    
-    socket.emit('message', formatMessage(Name,'Welcome to the Chat'));
+    // socket.emit('message', formatMessage(Name,'Welcome to the Chat'));
 
     
     socket.broadcast
