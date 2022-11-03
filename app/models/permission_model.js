@@ -7,92 +7,92 @@ module.exports=(sequelize,DataTypes)=>{
         },
         view_channels:{
             type:DataTypes.BOOLEAN,
-            defaultValue: true,
+            defaultValue: false,
         },
         manage_channels:{
             type:DataTypes.BOOLEAN,
-            defaultValue: true,
+            defaultValue: false,
         },
         manage_roles:{
             type:DataTypes.BOOLEAN,
-            defaultValue: true,
+            defaultValue: false,
         },
         manage_emoji_stickers:{
             type:DataTypes.BOOLEAN,
-            defaultValue: true,
+            defaultValue: false,
             
         },
         view_auditlogs:{
             type:DataTypes.BOOLEAN,
-            defaultValue: true,
+            defaultValue: false,
         },
         manage_webhooks:{
             type:DataTypes.BOOLEAN,
-            defaultValue: true,
+            defaultValue: false,
         },
         manage_server:{
             type:DataTypes.BOOLEAN,
-            defaultValue: true,
+            defaultValue: false,
         },
         create_invite:{
             type:DataTypes.BOOLEAN,
-            defaultValue: true,
+            defaultValue: false,
         },
         change_nickname:{
             type:DataTypes.BOOLEAN,
-            defaultValue: true,
+            defaultValue: false,
         },
         manage_nickname:{
             type:DataTypes.BOOLEAN,
-            defaultValue: true,
+            defaultValue: false,
         },
         kick_members:{
             type:DataTypes.BOOLEAN,
-            defaultValue: true,
+            defaultValue: false,
         },
         ban_members:{
             type:DataTypes.BOOLEAN,
-            defaultValue: true,
+            defaultValue: false,
         },
         moderate_member:{
             type:DataTypes.BOOLEAN,
-            defaultValue: true,
+            defaultValue: false,
         },
         send_messages:{
             type:DataTypes.BOOLEAN,
-            defaultValue: true,
+            defaultValue: false,
         },
         send_messages_in_thread:{
             type:DataTypes.BOOLEAN,
-            defaultValue: true,
+            defaultValue: false,
         },
         create_public_thread:{
             type:DataTypes.BOOLEAN,
-            defaultValue: true,
+            defaultValue: false,
         },
         embed_links:{
             type:DataTypes.BOOLEAN,
-            defaultValue: true,
+            defaultValue: false,
         },
         attach_files:{
             type:DataTypes.BOOLEAN,
-            defaultValue: true,
+            defaultValue: false,
         },
         add_reactions:{
             type:DataTypes.BOOLEAN,
-            defaultValue: true,
+            defaultValue: false,
         },
         manage_messages:{
             type:DataTypes.BOOLEAN,
-            defaultValue: true,
+            defaultValue: false,
         },
         manage_threads:{
             type:DataTypes.BOOLEAN,
-            defaultValue: true,
+            defaultValue: false,
         },
         mention:{
             type:DataTypes.BOOLEAN,
-            defaultValue: true,
+            defaultValue: false,
         },
        
     });

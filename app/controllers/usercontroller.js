@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 
 
 //adding an user(sign up)
-const addUser=async(req,res)=>{
+const signUp=async(req,res)=>{
     const hashedpassword=await bcrypt.hash(req.body.password,10);
     let info={
         name:req.body.name,
@@ -39,7 +39,7 @@ const getOneuser=async(req,res)=>{
 const login=async(req,res)=>{
     try{
         
-        const user= await User.findOne({where:{email_id:req.body.userName}});
+        const user= await User.findOne({where:{email_id:req.body.email_id}});
         if(user==null)
         {
             // res.send("User didnt exist.....\n For creating an new user go to '127.0.0.1/user/adduser'");
@@ -75,5 +75,5 @@ const login=async(req,res)=>{
 
 
 module.exports={
-    addUser,getOneuser,login
+    signUp,getOneuser,login
 }

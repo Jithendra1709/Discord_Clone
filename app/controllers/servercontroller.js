@@ -5,7 +5,7 @@ const Servermember=db.servermember;
 const Channel=db.channels;
 const Serverchanneluser=db.serverchanneluser;
 
-const addserver=async(req,res)=>{
+const createserver=async(req,res)=>{
     let info={
         name:req.body.name,
         created_by:req.userId,
@@ -23,6 +23,8 @@ const addserver=async(req,res)=>{
     catch(err){ res.send(err.message)}
     
 }
+
+
 
 const getallservers=async(req,res)=>{
     try{
@@ -85,5 +87,5 @@ const joinserver=async(req,res)=>{
 
 
 module.exports={
-    addserver,getallservers,getnonprivatechannels,joinserver,
+    createserver,getallservers,getnonprivatechannels,joinserver,
 }

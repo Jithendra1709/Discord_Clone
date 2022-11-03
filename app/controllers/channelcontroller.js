@@ -6,8 +6,8 @@ const Channelmember=db.channelmember;
 const Servermember=db.servermember;
 const Serverchanneluser=db.serverchanneluser;
 
-//To addchannel by the user
-const addchannel=async(req,res)=>{
+//To createChannel by the user
+const createChannel=async(req,res)=>{
     const member=await Servermember.findOne({where:{userId:req.userId}})
     let info={
         name:req.body.name,
@@ -24,7 +24,7 @@ const addchannel=async(req,res)=>{
     if(member){
     try{
     const channel=await Channel.create(info);
-    const addchannel=await Channelmember.create({
+    const createChannel=await Channelmember.create({
         userId:req.userId,
         channelId:channel.id,
     })
@@ -61,7 +61,7 @@ const getchannel=async(req,res)=>{
     //let id=req.params.id;
     
     try{
-    const channel=await Channel.findAll({where :{created_by:req.userId}});
+    const channel=await Channelmember.findAll({where :{userId:req.userId}});
     res.status(200).send(channel);
     // console.log(req.userId+"hello");
     }
@@ -102,7 +102,7 @@ const joinchannel=async(req,res)=>{
         let channel=await Channel.findOne({where:{id:id}});
 
         // console.log(channel.name)
-       if(channel) {
+       if(channel && channel.private_channel==false) {
       let info={
         userId:req.userId,
         channelId:id,
@@ -121,6 +121,21 @@ const joinchannel=async(req,res)=>{
             res.status(200).json({channelmemeberdata:data,serverchanneldata:serverchannel});
           
     }
+    if(channel && channel.private_channel==true){
+        let info={
+            userId:req.userId,
+            channelId:id,
+        }
+        const data =await Channelmember.create(info);
+        if(req.body.role){
+        const serverchannel=await Serverchanneluser.create()
+        }
+    }
+
+
+
+
+
     else
     res.status(200).send("channel doesnt exist");
     }
@@ -130,10 +145,19 @@ const joinchannel=async(req,res)=>{
 //Get the number of users peresent in that channel 
 const getusersofchannel=async(req,res)=>{
     try{
+        
+        const member=await Channelmember.findOne({where:{userId:req.userId,channelId:req.body.id}})
+        if(member){
         const data=await Channelmember.findAll(
             {where:
                 {channelId:req.body.id},
                attributes:['id'],
+               include : [
+                {
+                    model : db.channels,
+                    attributes:['name']
+                    
+    }],
                  include : [
                 {
                     model : db.users,
@@ -143,10 +167,12 @@ const getusersofchannel=async(req,res)=>{
     })
     res.status(200).send(data);
 }
+else{res.send("Not accessable")}
+    }
     catch(err){res.send(err.message);}
 }
 
 
 module.exports={
-    addchannel,getchannel,sendmsg,joinchannel,getusersofchannel,
+    createChannel,getchannel,sendmsg,joinchannel,getusersofchannel,
 }

@@ -6,7 +6,7 @@ const addrole=async(req,res)=>{
     let info={
         role_name:req.body.role_name,
         view_channels:req.body.view_channels,
-        manage_channel:req.body.manage_channel,
+        manage_channels:req.body.manage_channels,
         manage_roles:req.body.manage_roles,
         manage_emoji_stickers:req.body.manage_emoji_stickers,
         view_auditlogs:req.body.view_auditlogs,
