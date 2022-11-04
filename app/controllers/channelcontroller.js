@@ -1,5 +1,8 @@
 // const { channelmembers, users } = require('../models');
+const { where } = require('sequelize');
+const { servermember, channelmember } = require('../models');
 const db=require('../models');
+const server_model = require('../models/server_model');
 const Channel=db.channels;
 const User=db.users;
 const Channelmember=db.channelmember;
@@ -8,7 +11,22 @@ const Serverchanneluser=db.serverchanneluser;
 
 //To createChannel by the user
 const createChannel=async(req,res)=>{
-    const member=await Servermember.findOne({where:{userId:req.userId}})
+    // const member=await Servermember.findOne({where:{userId:req.userId}})
+    const creator=await db.servers.findOne({where:{created_by:req.userId}});
+//     try{
+//     const roledata=await db.permission.findAll({where:{manage_channels:true,
+//         include : [
+//             {
+//                 model : db.serverchanneluser,
+//                 through: {
+//                     attributes: ['id'],
+//                 }
+                
+// }],
+// }})
+// console.log(roledata)
+
+//     }catch(err){res.send(err.message);}
     let info={
         name:req.body.name,
         // channel_id:req.body.channel_id,
@@ -21,7 +39,12 @@ const createChannel=async(req,res)=>{
         created_by:req.userId,
         private_channel:req.body.private_channel,
     }
-    if(member){
+   
+    // if(creator || (role.userId==req.userId))
+    // {
+    //     res.send('successful');
+    // }
+    if(creator){
     try{
     const channel=await Channel.create(info);
     const createChannel=await Channelmember.create({
@@ -100,42 +123,70 @@ const joinchannel=async(req,res)=>{
     try{
         // let channel=await Channel.findOne({where:{id:req.body.id,private_channel:false}});
         let channel=await Channel.findOne({where:{id:id}});
+        const sermem=await Servermember.findOne({where:{userId:req.userId,serverId:channel.serverId}});
 
         // console.log(channel.name)
-       if(channel && channel.private_channel==false) {
-      let info={
-        userId:req.userId,
-        channelId:id,
-      }
+    //    if(channel && channel.private_channel==false && sermem) {
+    //   let info={
+    //     userId:req.userId,
+    //     channelId:id,
+    //   }
      
-        const data=await Channelmember.create(info);
-        const serverchannel=await Serverchanneluser.create({
+    //     const data=await Channelmember.create(info);
+    //    // const serdata=await Servermember.create({userId:req.userId,serverId:channel.serverId})
+    //     const serverchannel=await Serverchanneluser.create({
             
+    //         userId:req.userId,
+    //         private:channel.private_channel,
+    //         serverId:channel.serverId,
+    //         role:1,
+    //         channelId:id})
+
+        
+    //         res.status(200).json({channelmemeberdata:data,serverchanneldata:serverchannel});
+          
+    // }
+
+    if((channel && channel.private_channel==false)&&(!sermem || sermem))
+    {
+        const data=await servermember.create({
+            userId:req.userId,
+            serverId:channel.serverId
+        })
+        const chdata=await channelmember.create({
+            userId:req.userId,
+            channelId:id,
+        })
+        const scd=await Serverchanneluser.create({
             userId:req.userId,
             private:channel.private_channel,
             serverId:channel.serverId,
-            role:req.body.role,
-            channelId:id})
-
-        
-            res.status(200).json({channelmemeberdata:data,serverchanneldata:serverchannel});
-          
+            role:1,
+            channelId:id
+        })
+        res.status(200).send(`User added to server and the channel ${id}`);
     }
-    if(channel && channel.private_channel==true){
-        let info={
+
+    // const sermem=await Servermember.findOne({where:{userId:req.userId,serverId:channel.serverId}});
+    if(channel && channel.private_channel==true && !sermem){
+        // const data =await Channelmember.create(info);
+        const serdata=await Servermember.create({userId:req.userId,serverId:channel.serverId})
+        res.status(200).json({message:"user not in server so added to the server",Data:serdata});
+    }
+
+    if(channel && channel.private_channel==true && sermem){
+        const role=await db.permission.findOne({where:{id:req.body.role}})
+        if(role){
+        const serdata=await Serverchanneluser.create({
             userId:req.userId,
+            serverId:channel.serverId,
             channelId:id,
-        }
-        const data =await Channelmember.create(info);
-        if(req.body.role){
-        const serverchannel=await Serverchanneluser.create()
-        }
+            role:req.body.role ,
+            private:true,
+        })
     }
-
-
-
-
-
+    else{ res.status(400).send('Provide the role for getting added in the channel');}
+    }
     else
     res.status(200).send("channel doesnt exist");
     }
