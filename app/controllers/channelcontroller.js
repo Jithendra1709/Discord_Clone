@@ -13,20 +13,7 @@ const Serverchanneluser=db.serverchanneluser;
 const createChannel=async(req,res)=>{
     // const member=await Servermember.findOne({where:{userId:req.userId}})
     const creator=await db.servers.findOne({where:{created_by:req.userId}});
-//     try{
-//     const roledata=await db.permission.findAll({where:{manage_channels:true,
-//         include : [
-//             {
-//                 model : db.serverchanneluser,
-//                 through: {
-//                     attributes: ['id'],
-//                 }
-                
-// }],
-// }})
-// console.log(roledata)
-
-//     }catch(err){res.send(err.message);}
+    const role=await Serverchanneluser.findOne({where:{userId:req.userId,serverId:req.body.serverId,role:req.body.role}})
     let info={
         name:req.body.name,
         // channel_id:req.body.channel_id,
@@ -56,6 +43,7 @@ const createChannel=async(req,res)=>{
         userId:req.userId,
         serverId:channel.serverId,
         channelId:channel.id,
+        role:1,
         private:false})
    // console.log(channel.id);
     res.status(200).send(channel);

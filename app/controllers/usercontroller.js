@@ -39,7 +39,7 @@ const getOneuser=async(req,res)=>{
 const login=async(req,res)=>{
     try{
         
-        const user= await User.findOne({where:{email_id:req.body.email_id}});
+        const user= await User.findOne({where:{email_id:req.body.userName}});
         if(user==null)
         {
             // res.send("User didnt exist.....\n For creating an new user go to '127.0.0.1/user/adduser'");
@@ -69,7 +69,7 @@ const login=async(req,res)=>{
         }
     }
     catch{
-        res.send(500).send();
+        res.send(401).send();
     }
 }
 

@@ -14,11 +14,15 @@ app.use(express.json());
 
 app.use(express.urlencoded({extended:true}));
 
+app.get('/welcome',(req,res)=>{
+    res.json({message:'welcome to discord application'});
+});
+
 const userrouter=require('./Routes/userroutes');
 app.use('/',userrouter);
 
 const otprouter=require('./Routes/otproutes');
-app.use('/',otprouter);
+app.use('/otp',otprouter);
 
 const messagerouter=require('./Routes/messageroute');
 app.use('/message',messagerouter);
@@ -35,9 +39,7 @@ app.use('/user',serverrouter);
 const notificationrouter=require('./Routes/notificationroutes');
 app.use('/notification',notificationrouter);
 
-app.get('/welcome',(req,res)=>{
-    res.json({message: 'welcome to discord application'});
-});
+
 
 
 const PORT=process.env.PORT||7070;

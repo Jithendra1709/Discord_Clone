@@ -76,9 +76,12 @@ res.status(200).send(details);
 }
 
 const joinserver=async(req,res)=>{
-  
+  try{
     const join=await Servermember.create({userId:req.userId,serverId:req.params.id});
     res.status(200).send(join);
+
+  }
+  catch(err){res.send(err.message)}
 }
 
 
